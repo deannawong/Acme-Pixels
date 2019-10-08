@@ -1,0 +1,129 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <h1>Acme Pixels</h1>
+
+    <div id="container">
+    
+        <div id="form">
+            
+        <h2>Controls</h2>
+        <button id="addRow"> Add a Row</button>
+        <button id="removeRow"> Remove a Row</button>
+        <button id="addColumn"> Add A column</button>
+        <button id="removeColumn">Remove Column</button>
+        </div>
+
+        <div id="gridContainer">
+        
+        <h2>Canvas</h2>
+        <div id="canvas"> </div>
+
+        </div>
+
+    </div>
+</body>
+    <script>
+
+        const canvas=document.getElementById('canvas');
+        const addRow=document.getElementById('addRow');
+        const removeRow=document.getElementById('removeRow');
+        const addColumn=document.getElementById('addColumn');
+        const removeColumn=document.getElementById('removeColumn');
+        const form=document.getElementById('form');
+
+        const generateNxN = (rows,columns) => {
+            let arr = [];
+            
+            for(let y =0; y<rows;y++){
+                let row = [];
+                for(let x =0;x<columns;x++){
+                    row.push('');
+                }
+                arr.push(row)
+            }
+            return arr;
+        }
+
+        let x=5;
+        let y=5;
+        let array=generateNxN(x,y);
+
+        const renderGrid = () => {
+        
+            canvas.innerHTML='';
+
+            const grid=document.createElement('div')
+            grid.className='grid'
+
+            for(let y=0;y<array.length;y++){
+                const htmlRow=document.createElement('div');
+                htmlRow.className='row';
+                htmlRow.id=`${y}`;
+
+                for(let x=0;x<array[0].length;x++){
+                    const htmlCell=document.createElement('div');
+                    htmlCell.className='cell';
+                    htmlCell.id=`${x},${y}`
+
+                    htmlRow.appendChild(htmlCell);
+
+                }
+                grid.appendChild(htmlRow);
+            }
+            canvas.appendChild(grid);
+
+        }
+
+        form.addEventListener('click',(ev)=>{
+
+            if(ev.target.nodeName==='BUTTON'){
+                if(ev.target.id==='addRow'){
+                    console.log('HELLO');
+                    x++;
+                    array=generateNxN(x,y);
+                    renderGrid();
+                }
+                if(ev.target.id==='removeRow'){
+                    x--;
+                    array=generateNxN(x,y);
+                    renderGrid ();
+                }
+                if(ev.target.id ==='addColumn'){
+                    y++;
+                    array=generateNxN(x,y);
+                    renderGrid();
+                }
+                if(ev.target.id ==='removeColumn'){
+                    y--;
+                    array=generateNxN(x,y);
+                    renderGrid ();
+                }
+            }
+        })
+
+        renderGrid();
+        
+
+        canvas.addEventListener('click', (ev)=>{
+            if(ev.target.className.includes('cell')){
+                ev.target.classList.toggle('blue');
+                const coords = ev.target.id;
+                const xCoord=parseInt(coords[0]);
+                const yCoord=parseInt(coords[2]);
+
+                array[yCoord][xCoord]='blue';
+
+                console.log(array);
+
+                
+            }
+        })
+    </script>
+</html>
