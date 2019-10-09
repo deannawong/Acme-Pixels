@@ -13,11 +13,20 @@
     
         <div id="form">
             
-        <h2>Controls</h2>
-        <button id="addRow"> Add a Row</button>
-        <button id="removeRow"> Remove a Row</button>
-        <button id="addColumn"> Add A column</button>
-        <button id="removeColumn">Remove Column</button>
+            <h2>Controls</h2>
+            <button id="addRow"> Add a Row</button>
+            <button id="removeRow"> Remove a Row</button>
+            <button id="addColumn"> Add A column</button>
+            <button id="removeColumn">Remove Column</button>
+
+            <div id="swatches">
+                    <div class="blue" id='swatch'></div>
+                    <div class="teal" id='swatch'></div>
+                    <div class="palegoldenrod" id='swatch'></div>
+                    <div class="magenta" id='swatch'></div>
+                    <div class="tomato" id='swatch'></div>
+            </div>
+        
         </div>
 
         <div id="gridContainer">
@@ -37,6 +46,7 @@
         const addColumn=document.getElementById('addColumn');
         const removeColumn=document.getElementById('removeColumn');
         const form=document.getElementById('form');
+        const swatches=document.getElementById('swatches');
 
         const generateNxN = (rows,columns) => {
             let arr = [];
@@ -55,8 +65,7 @@
         let y=5;
         let array=generateNxN(x,y);
 
-        const renderGrid = () => {
-        
+        const renderGrid = () => {       
             canvas.innerHTML='';
 
             const grid=document.createElement('div')
@@ -68,8 +77,14 @@
                 htmlRow.id=`${y}`;
 
                 for(let x=0;x<array[0].length;x++){
+                    
                     const htmlCell=document.createElement('div');
                     htmlCell.className='cell';
+
+                    if(array[y][x]!==''){
+                        htmlCell.className=`cell ${array[y][x]}`;
+                    }
+
                     htmlCell.id=`${x},${y}`
 
                     htmlRow.appendChild(htmlCell);
@@ -85,45 +100,64 @@
 
             if(ev.target.nodeName==='BUTTON'){
                 if(ev.target.id==='addRow'){
-                    console.log('HELLO');
-                    x++;
-                    array=generateNxN(x,y);
-                    renderGrid();
+                    const newRow=[];
+                    for(let i=0;i<array[0].length;i++){
+                        newRow.push('');
+                    }
+                    array.push(newRow);
                 }
                 if(ev.target.id==='removeRow'){
-                    x--;
-                    array=generateNxN(x,y);
-                    renderGrid ();
+                    array.pop();
                 }
                 if(ev.target.id ==='addColumn'){
-                    y++;
-                    array=generateNxN(x,y);
-                    renderGrid();
+                    array.forEach(row=>row.push(''))
+
                 }
                 if(ev.target.id ==='removeColumn'){
-                    y--;
-                    array=generateNxN(x,y);
-                    renderGrid ();
+                    array.forEach(row=>row.pop())
+
                 }
+                renderGrid();
+            }
+            
+        })
+
+        
+        let swatchColor='';
+
+        swatches.addEventListener('click',(ev)=>{
+
+            if(ev.target.id==='swatch'){
+                console.log('Swatch')
+                swatchColor=ev.target.className;
+            }
+            
+        })
+        
+
+        canvas.addEventListener('click', (ev)=>{
+            const coords = ev.target.id;
+            const xCoord=parseInt(coords[0]);
+            const yCoord=parseInt(coords[2]);
+
+            if(ev.target.className.includes('cell')){
+                if(ev.target.className.includes(`${swatchColor}`)){
+                    ev.target.classList.toggle(`${swatchColor}`);
+                    ev.target.className=`cell`;
+                    array[yCoord][xCoord]='';
+                }else{
+                    ev.target.className=`cell ${swatchColor}`;
+                    const coords = ev.target.id;
+                    const xCoord=parseInt(coords[0]);
+                    const yCoord=parseInt(coords[2]);
+
+                    array[yCoord][xCoord]=`${swatchColor}`;
+
+                }
+            
             }
         })
 
         renderGrid();
-        
-
-        canvas.addEventListener('click', (ev)=>{
-            if(ev.target.className.includes('cell')){
-                ev.target.classList.toggle('blue');
-                const coords = ev.target.id;
-                const xCoord=parseInt(coords[0]);
-                const yCoord=parseInt(coords[2]);
-
-                array[yCoord][xCoord]='blue';
-
-                console.log(array);
-
-                
-            }
-        })
     </script>
 </html>

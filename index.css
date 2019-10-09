@@ -31,3 +31,27 @@
 .blue{
     background-color:blue;
 }
+.teal{
+    background-color: teal;
+}
+.palegoldenrod{
+    background-color: palegoldenrod;
+
+}
+.magenta{
+    background-color: magenta;
+}
+.tomato{
+    background-color: tomato;
+}
+#swatch{
+    display:inline-block;
+    width:1rem;
+    height:1rem;
+
+}
+
+.swatches{
+    display:flex;
+    border:white .5px solid;
+}
